@@ -1,12 +1,12 @@
 
 ## Monitoring Product Releases with WSO2-SP
 Stream Processor, APIM Manager, Identity Server and Enterprise Integrator are the four products of WSO2. All these products are open source products. In every week there is a expected release for each of these products (usually each Tuesday). 
-The aim of this project is to monitor the product releases of these products with WSO2 Stream Processor. Through a Siddhi application it will connect to GitHub API and will fetch tag name, release_name and published date of the latest release for each product. 
+The aim of this project is to monitor the product releases of these products with WSO2 Stream Processor. Through a Siddhi application it will connect to GitHub API and will fetch tag name, release name and published date of the latest release for each product. 
 
 ## Features
 
  - Releases are displayed in a timeline widget including product type, tag name, release date and gap.
- - Sends a E-mail to the product teams if the release is late.
+ - Sends an E-mail to the product teams if the release is late.
 
 ## How to Setup
 **Step 01 -** Clone or Download the Project Monitoring Product Releases with WSO2 -SP.
