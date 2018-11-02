@@ -6,7 +6,7 @@ The aim of this project is to monitor the product releases of these products wit
 ## Features
 
  - Releases are displayed in a timeline widget including product type, tag name, release date and gap.
- - Sends an E-mail to the product teams if the release is late.
+ - Sends an E-mail to the product teams if the release is delayed.
 
 ## How to Setup
 **Step 01 -** Clone or Download the Project Monitoring Product Releases with WSO2 -SP.
