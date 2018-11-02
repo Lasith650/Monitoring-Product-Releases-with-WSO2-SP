@@ -9,7 +9,7 @@ The aim of this project is to monitor the product releases of these products wit
  - Sends an E-mail to the product teams if the release is delayed.
 
 ## How to Setup
-**Step 01 -** Clone or Download the Project Monitoring Product Releases with WSO2 -SP.
+**Step 01 -** Clone or Download the Project "Monitoring Product Releases with WSO2 -SP".
 
 **Step 02 -** Install [Oracle Java SE Development Kit (JDK)].(https://www.oracle.com/technetwork/java/javase/downloads/index.html) version 1.8* and set the JAVA_HOME environment variable.
 
