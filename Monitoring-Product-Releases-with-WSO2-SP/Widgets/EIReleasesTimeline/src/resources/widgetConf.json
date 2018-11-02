@@ -1,0 +1,31 @@
+{
+  "name": "EIReleasesTimeline",
+  "id": "EIReleasesTimeline",
+  "thumbnailURL": "",
+  "configs": {
+    "pubsub": {
+      "types": [
+        "publisher",
+        "subscriber"
+      ]
+    },
+    "providerConfig": {
+      "configs": {
+        "type": "RDBMSBatchDataProvider",
+        "config": {
+          "datasourceName": "ProductReleasesDB",
+          "tableName": "EIReleaseDetailsTable",
+          "queryData": {
+            "query": "select tag_name, release_date, gap from EIReleaseDetailsTable"
+          },
+          "incrementalColumn": "release_date",
+          "publishingInterval": 5,
+          "purgingInterval": 60,
+          "publishingLimit": 30,
+          "purgingLimit": 60,
+          "isPurgingEnable": false
+        }
+      }
+    }
+  }
+}

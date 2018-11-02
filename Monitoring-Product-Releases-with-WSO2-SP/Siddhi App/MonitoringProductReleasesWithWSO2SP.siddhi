@@ -1,0 +1,475 @@
+@App:name("MonitoringProductReleasesWithWSO2SP")
+@App:description("Description of the plan")
+
+@source(type='http', receiver.url='http://localhost:5005/SP', @map(type='json', @attributes(tag_name='$.tag_name', release_date='$.published_at', release_name='$.name')))
+define stream SPResponseStream( tag_name string,
+                                release_name string,
+                                release_date string);
+                            
+@source(type='http', receiver.url='http://localhost:5005/APIM', @map(type='json', @attributes(tag_name='$.tag_name', release_date='$.published_at', release_name='$.name')))
+define stream APIMResponseStream(   tag_name string,
+                                    release_name string,
+                                    release_date string);
+                                    
+@source(type='http', receiver.url='http://localhost:5005/EI', @map(type='json', @attributes(tag_name='$.tag_name', release_date='$.published_at', release_name='$.name')))
+define stream EIResponseStream(   tag_name string,
+                                    release_name string,
+                                    release_date string);
+                                    
+@source(type='http', receiver.url='http://localhost:5005/IS', @map(type='json', @attributes(tag_name='$.tag_name', release_date='$.published_at', release_name='$.name')))
+define stream ISResponseStream( tag_name string,
+                                release_name string,
+                                release_date string);
+                                
+@primaryKey('tag_name') 
+@store(type='rdbms', jdbc.url="jdbc:mysql://localhost:3306/ProductReleasesDB", username="root", password="LaSiTh650@" , jdbc.driver.name ="com.mysql.jdbc.Driver")                             
+define table SPReleaseDetailsTable( tag_name string,
+                                    release_name string,
+                                    release_date string,
+                                    release_expected_date string,
+                                    next_release_expected_date string,
+                                    gap long,
+                                    release_alert_count int,
+                                    product_type int);
+                                    
+@primaryKey('tag_name') 
+@store(type='rdbms', jdbc.url="jdbc:mysql://localhost:3306/ProductReleasesDB", username="root", password="LaSiTh650@" , jdbc.driver.name ="com.mysql.jdbc.Driver")                             
+define table APIMReleaseDetailsTable(   tag_name string,
+                                        release_name string,
+                                        release_date string,
+                                        release_expected_date string,
+                                        next_release_expected_date string,
+                                        gap long,
+                                        release_alert_count int,
+                                        product_type int);
+                                    
+@primaryKey('tag_name') 
+@store(type='rdbms', jdbc.url="jdbc:mysql://localhost:3306/ProductReleasesDB", username="root", password="LaSiTh650@" , jdbc.driver.name ="com.mysql.jdbc.Driver")                             
+define table EIReleaseDetailsTable( tag_name string,
+                                    release_name string,
+                                    release_date string,
+                                    release_expected_date string,
+                                    next_release_expected_date string,
+                                    gap long,
+                                    release_alert_count int,
+                                    product_type int);
+                                    
+@primaryKey('tag_name') 
+@store(type='rdbms', jdbc.url="jdbc:mysql://localhost:3306/ProductReleasesDB", username="root", password="LaSiTh650@" , jdbc.driver.name ="com.mysql.jdbc.Driver")                             
+define table ISReleaseDetailsTable( tag_name string,
+                                    release_name string,
+                                    release_date string,
+                                    release_expected_date string,
+                                    next_release_expected_date string,
+                                    gap long,
+                                    release_alert_count int,
+                                    product_type int);
+                                    
+@primaryKey('tag_name') 
+@store(type='rdbms', jdbc.url="jdbc:mysql://localhost:3306/ProductReleasesDB", username="root", password="LaSiTh650@" , jdbc.driver.name ="com.mysql.jdbc.Driver")                             
+define table ReleaseDetailsTable(   tag_name string,
+                                    release_name string,
+                                    release_date string,
+                                    release_expected_date string,
+                                    next_release_expected_date string,
+                                    gap long,
+                                    release_alert_count int,
+                                    product_type int);
+                                    
+define stream SPFetchedFromJoinStream(  tag_name string,
+                                        release_name string,
+                                        release_date string,
+                                        release_expected_date long,
+                                        next_release_expected_date long,
+                                        gap long,
+                                        release_alert_count int,
+                                        product_type int);
+                                        
+define stream APIMFetchedFromJoinStream(tag_name string,
+                                        release_name string,
+                                        release_date string,
+                                        release_expected_date long,
+                                        next_release_expected_date long,
+                                        gap long,
+                                        release_alert_count int,
+                                        product_type int);
+                                        
+define stream EIFetchedFromJoinStream(  tag_name string,
+                                        release_name string,
+                                        release_date string,
+                                        release_expected_date long,
+                                        next_release_expected_date long,
+                                        gap long,
+                                        release_alert_count int,
+                                        product_type int);
+                                        
+define stream ISFetchedFromJoinStream(  tag_name string,
+                                        release_name string,
+                                        release_date string,
+                                        release_expected_date long,
+                                        next_release_expected_date long,
+                                        gap long,
+                                        release_alert_count int,
+                                        product_type int);
+                
+                                        
+                                     
+define stream SPModifiedFetchedDetailsStream(   tag_name string,
+                                                release_name string,
+                                                release_date string,
+                                                release_expected_date string,
+                                                next_release_expected_date string,
+                                                gap long,
+                                                release_alert_count int,
+                                                product_type int);
+                                                
+define stream APIMModifiedFetchedDetailsStream( tag_name string,
+                                                release_name string,
+                                                release_date string,
+                                                release_expected_date string,
+                                                next_release_expected_date string,
+                                                gap long,
+                                                release_alert_count int,
+                                                product_type int);
+                                                
+define stream EIModifiedFetchedDetailsStream(   tag_name string,
+                                                release_name string,
+                                                release_date string,
+                                                release_expected_date string,
+                                                next_release_expected_date string,
+                                                gap long,
+                                                release_alert_count int,
+                                                product_type int);
+                                                
+define stream ISModifiedFetchedDetailsStream(   tag_name string,
+                                                release_name string,
+                                                release_date string,
+                                                release_expected_date string,
+                                                next_release_expected_date string,
+                                                gap long,
+                                                release_alert_count int,
+                                                product_type int);
+                                            
+define stream ToSPReleaseAlertStream( next_release_expected_date string);
+
+define stream ToAPIMReleaseAlertStream( next_release_expected_date string);
+
+define stream ToEIReleaseAlertStream( next_release_expected_date string);
+
+define stream ToISReleaseAlertStream( next_release_expected_date string);
+
+@sink(type='email', @map(type='text') ,
+                    username ='manaramjayalath',
+                    address ='manaramjayalath@gmail.com',
+                    password= 'LaSiTh650@',
+                    subject='Delayed Release', 
+                    to='lasithmanaram@gmail.com',
+                    port = '465',
+                    host = 'smtp.gmail.com',
+                    ssl.enable = 'true',
+                    auth = 'true')                                            
+define stream SPReleaseAlertStream(next_release_expected_date string);
+
+@sink(type='email', @map(type='text') ,
+                    username ='manaramjayalath',
+                    address ='manaramjayalath@gmail.com',
+                    password= 'LaSiTh650@',
+                    subject='Delayed Release', 
+                    to='lasithmanaram@gmail.com',
+                    port = '465',
+                    host = 'smtp.gmail.com',
+                    ssl.enable = 'true',
+                    auth = 'true')                                            
+define stream APIMReleaseAlertStream(next_release_expected_date string);
+
+@sink(type='email', @map(type='text') ,
+                    username ='manaramjayalath',
+                    address ='manaramjayalath@gmail.com',
+                    password= 'LaSiTh650@',
+                    subject='Delayed Release', 
+                    to='lasithmanaram@gmail.com',
+                    port = '465',
+                    host = 'smtp.gmail.com',
+                    ssl.enable = 'true',
+                    auth = 'true')                                            
+define stream EIReleaseAlertStream(next_release_expected_date string);
+
+@sink(type='email', @map(type='text') ,
+                    username ='manaramjayalath',
+                    address ='manaramjayalath@gmail.com',
+                    password= 'LaSiTh650@',
+                    subject='Delayed Release', 
+                    to='lasithmanaram@gmail.com',
+                    port = '465',
+                    host = 'smtp.gmail.com',
+                    ssl.enable = 'true',
+                    auth = 'true')                                            
+define stream ISReleaseAlertStream(next_release_expected_date string);
+                                    
+from SPResponseStream#window.length(1) as A join SPReleaseDetailsTable as Z
+select  ifThenElse(A.tag_name != Z.tag_name, A.tag_name, Z.tag_name) as tag_name,
+        ifThenElse(A.tag_name != Z.tag_name, A.release_name, Z.release_name) as release_name,
+        ifThenElse(A.tag_name != Z.tag_name, time:dateFormat(A.release_date, 'yyyy-MM-dd HH:mm:ss', "yyyy-MM-dd'T'HH:mm:ss'Z'"), Z.release_date) as release_date,
+        ifThenElse(A.tag_name != Z.tag_name, ifThenElse((time:timestampInMilliseconds(Z.next_release_expected_date,'yyyy-MM-dd HH:mm:ss')-(84*60*60*1000))>time:timestampInMilliseconds(A.release_date,"yyyy-MM-dd'T'HH:mm:ss'Z'"), time:timestampInMilliseconds(Z.next_release_expected_date,'yyyy-MM-dd HH:mm:ss')-(2*84*60*60*1000), time:timestampInMilliseconds(Z.next_release_expected_date,'yyyy-MM-dd HH:mm:ss')+(((time:timestampInMilliseconds(Z.next_release_expected_date,'yyyy-MM-dd HH:mm:ss')-time:timestampInMilliseconds(A.release_date,"yyyy-MM-dd'T'HH:mm:ss'Z'"))/(-2*84*60*60*1000))*(2*84*60*60*1000))), time:timestampInMilliseconds(Z.release_expected_date,'yyyy-MM-dd HH:mm:ss')) as release_expected_date,
+        
+        ifThenElse(A.tag_name != Z.tag_name, ifThenElse((time:timestampInMilliseconds(Z.next_release_expected_date,'yyyy-MM-dd HH:mm:ss')-(84*60*60*1000))>time:timestampInMilliseconds(A.release_date,"yyyy-MM-dd'T'HH:mm:ss'Z'"), time:timestampInMilliseconds(Z.next_release_expected_date,'yyyy-MM-dd HH:mm:ss'), time:timestampInMilliseconds(Z.next_release_expected_date,'yyyy-MM-dd HH:mm:ss')+((((time:timestampInMilliseconds(Z.next_release_expected_date,'yyyy-MM-dd HH:mm:ss')-time:timestampInMilliseconds(A.release_date,"yyyy-MM-dd'T'HH:mm:ss'Z'"))/(-2*84*60*60*1000))+1)*(2*84*60*60*1000))), time:timestampInMilliseconds(Z.next_release_expected_date,'yyyy-MM-dd HH:mm:ss')) as next_release_expected_date,
+        
+        ifThenElse(A.tag_name != Z.tag_name, ifThenElse((time:timestampInMilliseconds(Z.next_release_expected_date,'yyyy-MM-dd HH:mm:ss')-(84*60*60*1000))>time:timestampInMilliseconds(A.release_date,"yyyy-MM-dd'T'HH:mm:ss'Z'"), ((time:timestampInMilliseconds(Z.next_release_expected_date,'yyyy-MM-dd HH:mm:ss')-(2*84*60*60*1000))-time:timestampInMilliseconds(A.release_date,"yyyy-MM-dd'T'HH:mm:ss'Z'"))/(60*60*1000), (time:timestampInMilliseconds(Z.next_release_expected_date,'yyyy-MM-dd HH:mm:ss')+(((time:timestampInMilliseconds(Z.next_release_expected_date,'yyyy-MM-dd HH:mm:ss')-time:timestampInMilliseconds(A.release_date,"yyyy-MM-dd'T'HH:mm:ss'Z'"))/(-2*84*60*60*1000))*(2*84*60*60*1000))-time:timestampInMilliseconds(A.release_date,"yyyy-MM-dd'T'HH:mm:ss'Z'"))/(60*60*1000)), Z.gap) as gap,
+        
+        release_alert_count + 1 as release_alert_count,
+        product_type
+        
+insert into SPFetchedFromJoinStream;
+
+from SPResponseStream as A join SPReleaseDetailsTable as Z
+on A.tag_name == Z.tag_name
+select Z.next_release_expected_date
+--Having time:dateFormat(time:timestampInMilliseconds(Z.next_release_expected_date,'yyyy-MM-dd HH:mm:ss'),'yyyy-MM-dd')  == time:dateFormat(time:timestampInMilliseconds("2018-10-30 00:00:01",'yyyy-MM-dd HH:mm:ss'),'yyyy-MM-dd')
+Having time:dateFormat(time:timestampInMilliseconds(Z.next_release_expected_date,'yyyy-MM-dd HH:mm:ss'),'yyyy-MM-dd')  == time:currentDate() 
+insert into ToSPReleaseAlertStream;
+
+from ToSPReleaseAlertStream
+select next_release_expected_date
+insert into SPReleaseAlertStream;
+
+from SPFetchedFromJoinStream
+select  tag_name,
+        release_name,
+        release_date,
+        time:dateFormat(release_expected_date, 'yyyy-MM-dd HH:mm:ss') as release_expected_date,
+        time:dateFormat(next_release_expected_date, 'yyyy-MM-dd HH:mm:ss') as next_release_expected_date,
+        gap,
+        release_alert_count,
+        product_type
+        
+insert into SPModifiedFetchedDetailsStream;
+
+from SPModifiedFetchedDetailsStream
+select  tag_name, 
+        release_name, 
+        release_date, 
+        release_expected_date, 
+        next_release_expected_date,
+        gap,
+        release_alert_count,
+        product_type
+        
+order by release_expected_date desc, release_alert_count desc limit 1
+update or insert into SPReleaseDetailsTable 
+on SPReleaseDetailsTable.tag_name == tag_name;
+
+from SPModifiedFetchedDetailsStream
+select  tag_name, 
+        release_name, 
+        release_date, 
+        release_expected_date, 
+        next_release_expected_date,
+        gap,
+        release_alert_count,
+        product_type
+order by release_expected_date desc, release_alert_count desc limit 1
+update or insert into ReleaseDetailsTable 
+on ReleaseDetailsTable.tag_name == tag_name;
+
+from APIMResponseStream#window.length(1) as A join APIMReleaseDetailsTable as Z
+select  ifThenElse(A.tag_name != Z.tag_name, A.tag_name, Z.tag_name) as tag_name,
+        ifThenElse(A.tag_name != Z.tag_name, A.release_name, Z.release_name) as release_name,
+        ifThenElse(A.tag_name != Z.tag_name, time:dateFormat(A.release_date, 'yyyy-MM-dd HH:mm:ss', "yyyy-MM-dd'T'HH:mm:ss'Z'"), Z.release_date) as release_date,
+        ifThenElse(A.tag_name != Z.tag_name, ifThenElse((time:timestampInMilliseconds(Z.next_release_expected_date,'yyyy-MM-dd HH:mm:ss')-(84*60*60*1000))>time:timestampInMilliseconds(A.release_date,"yyyy-MM-dd'T'HH:mm:ss'Z'"), time:timestampInMilliseconds(Z.next_release_expected_date,'yyyy-MM-dd HH:mm:ss')-(2*84*60*60*1000), time:timestampInMilliseconds(Z.next_release_expected_date,'yyyy-MM-dd HH:mm:ss')+(((time:timestampInMilliseconds(Z.next_release_expected_date,'yyyy-MM-dd HH:mm:ss')-time:timestampInMilliseconds(A.release_date,"yyyy-MM-dd'T'HH:mm:ss'Z'"))/(-2*84*60*60*1000))*(2*84*60*60*1000))), time:timestampInMilliseconds(Z.release_expected_date,'yyyy-MM-dd HH:mm:ss')) as release_expected_date,
+        
+        ifThenElse(A.tag_name != Z.tag_name, ifThenElse((time:timestampInMilliseconds(Z.next_release_expected_date,'yyyy-MM-dd HH:mm:ss')-(84*60*60*1000))>time:timestampInMilliseconds(A.release_date,"yyyy-MM-dd'T'HH:mm:ss'Z'"), time:timestampInMilliseconds(Z.next_release_expected_date,'yyyy-MM-dd HH:mm:ss'), time:timestampInMilliseconds(Z.next_release_expected_date,'yyyy-MM-dd HH:mm:ss')+((((time:timestampInMilliseconds(Z.next_release_expected_date,'yyyy-MM-dd HH:mm:ss')-time:timestampInMilliseconds(A.release_date,"yyyy-MM-dd'T'HH:mm:ss'Z'"))/(-2*84*60*60*1000))+1)*(2*84*60*60*1000))), time:timestampInMilliseconds(Z.next_release_expected_date,'yyyy-MM-dd HH:mm:ss')) as next_release_expected_date,
+        
+        ifThenElse(A.tag_name != Z.tag_name, ifThenElse((time:timestampInMilliseconds(Z.next_release_expected_date,'yyyy-MM-dd HH:mm:ss')-(84*60*60*1000))>time:timestampInMilliseconds(A.release_date,"yyyy-MM-dd'T'HH:mm:ss'Z'"), ((time:timestampInMilliseconds(Z.next_release_expected_date,'yyyy-MM-dd HH:mm:ss')-(2*84*60*60*1000))-time:timestampInMilliseconds(A.release_date,"yyyy-MM-dd'T'HH:mm:ss'Z'"))/(60*60*1000), (time:timestampInMilliseconds(Z.next_release_expected_date,'yyyy-MM-dd HH:mm:ss')+(((time:timestampInMilliseconds(Z.next_release_expected_date,'yyyy-MM-dd HH:mm:ss')-time:timestampInMilliseconds(A.release_date,"yyyy-MM-dd'T'HH:mm:ss'Z'"))/(-2*84*60*60*1000))*(2*84*60*60*1000))-time:timestampInMilliseconds(A.release_date,"yyyy-MM-dd'T'HH:mm:ss'Z'"))/(60*60*1000)), Z.gap) as gap,
+        
+        release_alert_count + 1 as release_alert_count,
+        product_type
+        
+insert into APIMFetchedFromJoinStream;
+
+from APIMResponseStream as A join APIMReleaseDetailsTable as Z
+on A.tag_name == Z.tag_name
+select Z.next_release_expected_date
+--Having time:dateFormat(time:timestampInMilliseconds(Z.next_release_expected_date,'yyyy-MM-dd HH:mm:ss'),'yyyy-MM-dd')  == time:dateFormat(time:timestampInMilliseconds("2018-10-30 00:00:01",'yyyy-MM-dd HH:mm:ss'),'yyyy-MM-dd')
+Having time:dateFormat(time:timestampInMilliseconds(Z.next_release_expected_date,'yyyy-MM-dd HH:mm:ss'),'yyyy-MM-dd')  == time:currentDate() 
+insert into ToAPIMReleaseAlertStream;
+
+from ToAPIMReleaseAlertStream
+select next_release_expected_date
+insert into APIMReleaseAlertStream;
+
+from APIMFetchedFromJoinStream
+select  tag_name,
+        release_name,
+        release_date,
+        time:dateFormat(release_expected_date, 'yyyy-MM-dd HH:mm:ss') as release_expected_date,
+        time:dateFormat(next_release_expected_date, 'yyyy-MM-dd HH:mm:ss') as next_release_expected_date,
+        gap,
+        release_alert_count,
+        product_type
+        
+insert into APIMModifiedFetchedDetailsStream;
+
+from APIMModifiedFetchedDetailsStream
+select  tag_name, 
+        release_name, 
+        release_date, 
+        release_expected_date, 
+        next_release_expected_date,
+        gap,
+        release_alert_count,
+        product_type
+        
+order by release_expected_date desc, release_alert_count desc limit 1
+update or insert into APIMReleaseDetailsTable 
+on APIMReleaseDetailsTable.tag_name == tag_name;
+
+from APIMModifiedFetchedDetailsStream
+select  tag_name, 
+        release_name, 
+        release_date, 
+        release_expected_date, 
+        next_release_expected_date,
+        gap,
+        release_alert_count,
+        product_type
+        
+order by release_expected_date desc, release_alert_count desc limit 1
+update or insert into ReleaseDetailsTable 
+on ReleaseDetailsTable.tag_name == tag_name;
+
+
+from EIResponseStream#window.length(1) as A join EIReleaseDetailsTable as Z
+select  ifThenElse(A.tag_name != Z.tag_name, A.tag_name, Z.tag_name) as tag_name,
+        ifThenElse(A.tag_name != Z.tag_name, A.release_name, Z.release_name) as release_name,
+        ifThenElse(A.tag_name != Z.tag_name, time:dateFormat(A.release_date, 'yyyy-MM-dd HH:mm:ss', "yyyy-MM-dd'T'HH:mm:ss'Z'"), Z.release_date) as release_date,
+        ifThenElse(A.tag_name != Z.tag_name, ifThenElse((time:timestampInMilliseconds(Z.next_release_expected_date,'yyyy-MM-dd HH:mm:ss')-(84*60*60*1000))>time:timestampInMilliseconds(A.release_date,"yyyy-MM-dd'T'HH:mm:ss'Z'"), time:timestampInMilliseconds(Z.next_release_expected_date,'yyyy-MM-dd HH:mm:ss')-(2*84*60*60*1000), time:timestampInMilliseconds(Z.next_release_expected_date,'yyyy-MM-dd HH:mm:ss')+(((time:timestampInMilliseconds(Z.next_release_expected_date,'yyyy-MM-dd HH:mm:ss')-time:timestampInMilliseconds(A.release_date,"yyyy-MM-dd'T'HH:mm:ss'Z'"))/(-2*84*60*60*1000))*(2*84*60*60*1000))), time:timestampInMilliseconds(Z.release_expected_date,'yyyy-MM-dd HH:mm:ss')) as release_expected_date,
+        
+        ifThenElse(A.tag_name != Z.tag_name, ifThenElse((time:timestampInMilliseconds(Z.next_release_expected_date,'yyyy-MM-dd HH:mm:ss')-(84*60*60*1000))>time:timestampInMilliseconds(A.release_date,"yyyy-MM-dd'T'HH:mm:ss'Z'"), time:timestampInMilliseconds(Z.next_release_expected_date,'yyyy-MM-dd HH:mm:ss'), time:timestampInMilliseconds(Z.next_release_expected_date,'yyyy-MM-dd HH:mm:ss')+((((time:timestampInMilliseconds(Z.next_release_expected_date,'yyyy-MM-dd HH:mm:ss')-time:timestampInMilliseconds(A.release_date,"yyyy-MM-dd'T'HH:mm:ss'Z'"))/(-2*84*60*60*1000))+1)*(2*84*60*60*1000))), time:timestampInMilliseconds(Z.next_release_expected_date,'yyyy-MM-dd HH:mm:ss')) as next_release_expected_date,
+        
+        ifThenElse(A.tag_name != Z.tag_name, ifThenElse((time:timestampInMilliseconds(Z.next_release_expected_date,'yyyy-MM-dd HH:mm:ss')-(84*60*60*1000))>time:timestampInMilliseconds(A.release_date,"yyyy-MM-dd'T'HH:mm:ss'Z'"), ((time:timestampInMilliseconds(Z.next_release_expected_date,'yyyy-MM-dd HH:mm:ss')-(2*84*60*60*1000))-time:timestampInMilliseconds(A.release_date,"yyyy-MM-dd'T'HH:mm:ss'Z'"))/(60*60*1000), (time:timestampInMilliseconds(Z.next_release_expected_date,'yyyy-MM-dd HH:mm:ss')+(((time:timestampInMilliseconds(Z.next_release_expected_date,'yyyy-MM-dd HH:mm:ss')-time:timestampInMilliseconds(A.release_date,"yyyy-MM-dd'T'HH:mm:ss'Z'"))/(-2*84*60*60*1000))*(2*84*60*60*1000))-time:timestampInMilliseconds(A.release_date,"yyyy-MM-dd'T'HH:mm:ss'Z'"))/(60*60*1000)), Z.gap) as gap,
+        
+        release_alert_count + 1 as release_alert_count,
+        product_type
+        
+insert into EIFetchedFromJoinStream;
+
+from EIResponseStream as A join EIReleaseDetailsTable as Z
+on A.tag_name == Z.tag_name
+select Z.next_release_expected_date
+--Having time:dateFormat(time:timestampInMilliseconds(Z.next_release_expected_date,'yyyy-MM-dd HH:mm:ss'),'yyyy-MM-dd')  == time:dateFormat(time:timestampInMilliseconds("2018-10-30 00:00:01",'yyyy-MM-dd HH:mm:ss'),'yyyy-MM-dd')
+Having time:dateFormat(time:timestampInMilliseconds(Z.next_release_expected_date,'yyyy-MM-dd HH:mm:ss'),'yyyy-MM-dd')  == time:currentDate() 
+insert into ToEIReleaseAlertStream;
+
+from ToEIReleaseAlertStream
+select next_release_expected_date
+insert into EIReleaseAlertStream;
+
+from EIFetchedFromJoinStream
+select  tag_name,
+        release_name,
+        release_date,
+        time:dateFormat(release_expected_date, 'yyyy-MM-dd HH:mm:ss') as release_expected_date,
+        time:dateFormat(next_release_expected_date, 'yyyy-MM-dd HH:mm:ss') as next_release_expected_date,
+        gap,
+        release_alert_count,
+        product_type
+        
+insert into EIModifiedFetchedDetailsStream;
+
+from EIModifiedFetchedDetailsStream
+select  tag_name, 
+        release_name, 
+        release_date, 
+        release_expected_date, 
+        next_release_expected_date,
+        gap,
+        release_alert_count,
+        product_type
+        
+order by release_expected_date desc, release_alert_count desc limit 1
+update or insert into EIReleaseDetailsTable 
+on EIReleaseDetailsTable.tag_name == tag_name;
+
+from EIModifiedFetchedDetailsStream
+select  tag_name, 
+        release_name, 
+        release_date, 
+        release_expected_date, 
+        next_release_expected_date,
+        gap,
+        release_alert_count,
+        product_type
+        
+order by release_expected_date desc, release_alert_count desc limit 1
+update or insert into ReleaseDetailsTable 
+on ReleaseDetailsTable.tag_name == tag_name;
+
+from ISResponseStream#window.length(1) as A join ISReleaseDetailsTable as Z
+select  ifThenElse(A.tag_name != Z.tag_name, A.tag_name, Z.tag_name) as tag_name,
+        ifThenElse(A.tag_name != Z.tag_name, A.release_name, Z.release_name) as release_name,
+        ifThenElse(A.tag_name != Z.tag_name, time:dateFormat(A.release_date, 'yyyy-MM-dd HH:mm:ss', "yyyy-MM-dd'T'HH:mm:ss'Z'"), Z.release_date) as release_date,
+        ifThenElse(A.tag_name != Z.tag_name, ifThenElse((time:timestampInMilliseconds(Z.next_release_expected_date,'yyyy-MM-dd HH:mm:ss')-(84*60*60*1000))>time:timestampInMilliseconds(A.release_date,"yyyy-MM-dd'T'HH:mm:ss'Z'"), time:timestampInMilliseconds(Z.next_release_expected_date,'yyyy-MM-dd HH:mm:ss')-(2*84*60*60*1000), time:timestampInMilliseconds(Z.next_release_expected_date,'yyyy-MM-dd HH:mm:ss')+(((time:timestampInMilliseconds(Z.next_release_expected_date,'yyyy-MM-dd HH:mm:ss')-time:timestampInMilliseconds(A.release_date,"yyyy-MM-dd'T'HH:mm:ss'Z'"))/(-2*84*60*60*1000))*(2*84*60*60*1000))), time:timestampInMilliseconds(Z.release_expected_date,'yyyy-MM-dd HH:mm:ss')) as release_expected_date,
+        
+        ifThenElse(A.tag_name != Z.tag_name, ifThenElse((time:timestampInMilliseconds(Z.next_release_expected_date,'yyyy-MM-dd HH:mm:ss')-(84*60*60*1000))>time:timestampInMilliseconds(A.release_date,"yyyy-MM-dd'T'HH:mm:ss'Z'"), time:timestampInMilliseconds(Z.next_release_expected_date,'yyyy-MM-dd HH:mm:ss'), time:timestampInMilliseconds(Z.next_release_expected_date,'yyyy-MM-dd HH:mm:ss')+((((time:timestampInMilliseconds(Z.next_release_expected_date,'yyyy-MM-dd HH:mm:ss')-time:timestampInMilliseconds(A.release_date,"yyyy-MM-dd'T'HH:mm:ss'Z'"))/(-2*84*60*60*1000))+1)*(2*84*60*60*1000))), time:timestampInMilliseconds(Z.next_release_expected_date,'yyyy-MM-dd HH:mm:ss')) as next_release_expected_date,
+        
+        ifThenElse(A.tag_name != Z.tag_name, ifThenElse((time:timestampInMilliseconds(Z.next_release_expected_date,'yyyy-MM-dd HH:mm:ss')-(84*60*60*1000))>time:timestampInMilliseconds(A.release_date,"yyyy-MM-dd'T'HH:mm:ss'Z'"), ((time:timestampInMilliseconds(Z.next_release_expected_date,'yyyy-MM-dd HH:mm:ss')-(2*84*60*60*1000))-time:timestampInMilliseconds(A.release_date,"yyyy-MM-dd'T'HH:mm:ss'Z'"))/(60*60*1000), (time:timestampInMilliseconds(Z.next_release_expected_date,'yyyy-MM-dd HH:mm:ss')+(((time:timestampInMilliseconds(Z.next_release_expected_date,'yyyy-MM-dd HH:mm:ss')-time:timestampInMilliseconds(A.release_date,"yyyy-MM-dd'T'HH:mm:ss'Z'"))/(-2*84*60*60*1000))*(2*84*60*60*1000))-time:timestampInMilliseconds(A.release_date,"yyyy-MM-dd'T'HH:mm:ss'Z'"))/(60*60*1000)), Z.gap) as gap,
+        
+        release_alert_count + 1 as release_alert_count,
+        product_type
+        
+insert into ISFetchedFromJoinStream;
+
+from ISResponseStream as A join ISReleaseDetailsTable as Z
+on A.tag_name == Z.tag_name
+select Z.next_release_expected_date
+--Having time:dateFormat(time:timestampInMilliseconds(Z.next_release_expected_date,'yyyy-MM-dd HH:mm:ss'),'yyyy-MM-dd')  == time:dateFormat(time:timestampInMilliseconds("2018-10-30 00:00:01",'yyyy-MM-dd HH:mm:ss'),'yyyy-MM-dd')
+Having time:dateFormat(time:timestampInMilliseconds(Z.next_release_expected_date,'yyyy-MM-dd HH:mm:ss'),'yyyy-MM-dd')  == time:currentDate() 
+insert into ToISReleaseAlertStream;
+
+from ToISReleaseAlertStream
+select next_release_expected_date
+insert into ISReleaseAlertStream;
+
+from ISFetchedFromJoinStream
+select  tag_name,
+        release_name,
+        release_date,
+        time:dateFormat(release_expected_date, 'yyyy-MM-dd HH:mm:ss') as release_expected_date,
+        time:dateFormat(next_release_expected_date, 'yyyy-MM-dd HH:mm:ss') as next_release_expected_date,
+        gap,
+        release_alert_count,
+        product_type
+        
+insert into ISModifiedFetchedDetailsStream;
+
+from ISModifiedFetchedDetailsStream
+select  tag_name, 
+        release_name, 
+        release_date, 
+        release_expected_date, 
+        next_release_expected_date,
+        gap,
+        release_alert_count,
+        product_type
+        
+order by release_expected_date desc, release_alert_count desc limit 1
+update or insert into ISReleaseDetailsTable 
+on ISReleaseDetailsTable.tag_name == tag_name;
+
+from ISModifiedFetchedDetailsStream
+select  tag_name, 
+        release_name, 
+        release_date, 
+        release_expected_date, 
+        next_release_expected_date,
+        gap,
+        release_alert_count,
+        product_type
+        
+order by release_expected_date desc, release_alert_count desc limit 1
+update or insert into ReleaseDetailsTable 
+on ReleaseDetailsTable.tag_name == tag_name;
+
+
+-- Please refer to https://docs.wso2.com/display/SP400/Quick+Start+Guide on getting started with SP editor. 
+
